@@ -1,0 +1,20 @@
+{
+  "name": "weekly-report-generator",
+  "version": "0.0.1",
+  "description": "A tool help me save efforts on writing a work report ",
+  "main": "index.js",
+  "repository": "github.com/jf3096/weekly-report-generator",
+  "author": "Ailun She",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^8.0.7",
+    "tslint": "^5.4.3",
+    "typescript": "^2.4.1"
+  },
+  "dependencies": {
+    "gitlog": "^2.4.0",
+    "moment": "^2.18.1",
+    "moment-range": "^3.0.3",
+    "typed-invariant": "^0.0.4"
+  }
+}

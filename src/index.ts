@@ -1,31 +1,35 @@
 import log from './utils/decorators/logs';
-import GitLog, {IGitLogInfo, IGitSettings} from './models/git-log/index';
 import env from '../env';
-import {getBusinessStartEndDay, isWithinBusinessDay} from './utils/date/index';
+import Excel from './excel/index';
+import * as path from 'path';
+import updateAsExpected from '../concrete-cases/index';
+import * as open from 'open';
+import Logger from './utils/log/index';
+
+function getAbsFileFromWorkingDirectory(relativePath: string): string {
+    return path.resolve(process.cwd(), relativePath);
+}
 
 export default class Workflow {
-
     @log(`开始执行...`)
     public static async start(): Promise<void> {
-        const {gitlog} = env;
-        const gitLogInfoList = await Workflow.getGitLogInfoList(gitlog.settings);
-        console.log(gitLogInfoList);
+        const {source, dest, shouldOpenAfterDest} = env.excel;
+        await Excel.write({
+            filename: getAbsFileFromWorkingDirectory(source),
+            decorator: async (workbook) => {
+                return updateAsExpected(workbook);
+            },
+            dest: getAbsFileFromWorkingDirectory(dest)
+        });
+        if (shouldOpenAfterDest) {
+            await Workflow.openDestFile(getAbsFileFromWorkingDirectory(dest));
+        }
     }
 
-    private static filterByBusinessDay(gitLogInfoList: IGitLogInfo[], relativeWeek: number = 0): IGitLogInfo[] {
-        return gitLogInfoList.reduce((result, gitLogInfo) => {
-            const {committerDate} = gitLogInfo;
-            if (isWithinBusinessDay(committerDate, relativeWeek)) {
-                result.push(gitLogInfo);
-            }
-            return result;
-        }, [] as IGitLogInfo[]);
-    }
-
-    @log(`获取git相关日志...`)
-    private static async getGitLogInfoList(gitLogSettings: IGitSettings): Promise<IGitLogInfo[]> {
-        const gitLog = new GitLog(gitLogSettings);
-        const gitLogInfoList = await gitLog.getGitLogInfoList();
-        return Workflow.filterByBusinessDay(gitLogInfoList);
+    @log((filename: string) => {
+        Logger.log(`打开指定文件: ${filename}`);
+    })
+    public static async openDestFile(filename: string): Promise<void> {
+        open(filename);
     }
 }

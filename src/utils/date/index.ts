@@ -33,3 +33,8 @@ export function isWithinBusinessDay(target: Moment, relativeWeek: number = 0): b
      */
     return target.isBetween(startDate, endDate, 'days', '[]');
 }
+
+export function generateBusinessDateRangeString(relativeWeek: number = 0, DATE_FORMAT = `YYYY.MM.DD`): string {
+    const {startDate, endDate} = getBusinessStartEndDay(relativeWeek);
+    return `${startDate.format(DATE_FORMAT)}-${endDate.format(DATE_FORMAT)}`;
+}

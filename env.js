@@ -1,7 +1,7 @@
-import {IGitSettings} from './src/models/git-log/index';
-import {generateBusinessDateRangeString} from './src/utils/date/index';
-
-export default {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const index_1 = require("./src/utils/date/index");
+exports.default = {
     gitlog: {
         settings: {
             repo: 'D:/projects/ams',
@@ -9,7 +9,7 @@ export default {
             author: `Allen`,
             nameStatus: false,
             fields: [`subject`, `authorName`, `authorDateRel`, `committerDate`]
-        } as IGitSettings
+        }
     },
     excel: {
         reflection: {
@@ -17,7 +17,8 @@ export default {
             updateAsExpected: `default.updateAsExpected`
         },
         source: `tests/1111.xlsx`,
-        dest: `dist/【工作周报】广州产品组XXX（${generateBusinessDateRangeString()}）.xlsx`,
+        dest: `dist/【工作周报】广州产品组XXX（${index_1.generateBusinessDateRangeString()}）.xlsx`,
         shouldOpenAfterDest: true
     }
 };
+//# sourceMappingURL=env.js.map

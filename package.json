@@ -8,13 +8,21 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^8.0.7",
+    "ava": "^0.20.0",
     "tslint": "^5.4.3",
     "typescript": "^2.4.1"
   },
   "dependencies": {
+    "exceljs": "^0.4.13",
     "gitlog": "^2.4.0",
+    "mkdirp": "^0.5.1",
     "moment": "^2.18.1",
     "moment-range": "^3.0.3",
-    "typed-invariant": "^0.0.4"
+    "open": "^0.0.5",
+    "typed-invariant": "^0.0.4",
+    "xlsx": "^0.10.6"
+  },
+  "scripts": {
+    "test": "ava src/**/*.spec.js"
   }
 }

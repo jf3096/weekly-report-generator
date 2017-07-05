@@ -15,31 +15,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const logs_1 = require("./utils/decorators/logs");
-const index_1 = require("./models/git-log/index");
 const env_1 = require("../env");
-const index_2 = require("./utils/date/index");
+const index_1 = require("./excel/index");
+const path = require("path");
+const index_2 = require("../concrete-cases/index");
+const open = require("open");
+const index_3 = require("./utils/log/index");
+function getAbsFileFromWorkingDirectory(relativePath) {
+    return path.resolve(process.cwd(), relativePath);
+}
 class Workflow {
     static start() {
         return __awaiter(this, void 0, void 0, function* () {
-            const { gitlog } = env_1.default;
-            const gitLogInfoList = yield Workflow.getGitLogInfoList(gitlog.settings);
-            console.log(gitLogInfoList);
+            const { source, dest, shouldOpenAfterDest } = env_1.default.excel;
+            yield index_1.default.write({
+                filename: getAbsFileFromWorkingDirectory(source),
+                decorator: (workbook) => __awaiter(this, void 0, void 0, function* () {
+                    return index_2.default(workbook);
+                }),
+                dest: getAbsFileFromWorkingDirectory(dest)
+            });
+            if (shouldOpenAfterDest) {
+                yield Workflow.openDestFile(getAbsFileFromWorkingDirectory(dest));
+            }
         });
     }
-    static filterByBusinessDay(gitLogInfoList, relativeWeek = 0) {
-        return gitLogInfoList.reduce((result, gitLogInfo) => {
-            const { committerDate } = gitLogInfo;
-            if (index_2.isWithinBusinessDay(committerDate, relativeWeek)) {
-                result.push(gitLogInfo);
-            }
-            return result;
-        }, []);
-    }
-    static getGitLogInfoList(gitLogSettings) {
+    static openDestFile(filename) {
         return __awaiter(this, void 0, void 0, function* () {
-            const gitLog = new index_1.default(gitLogSettings);
-            const gitLogInfoList = yield gitLog.getGitLogInfoList();
-            return Workflow.filterByBusinessDay(gitLogInfoList);
+            open(filename);
         });
     }
 }
@@ -47,7 +50,9 @@ __decorate([
     logs_1.default(`开始执行...`)
 ], Workflow, "start", null);
 __decorate([
-    logs_1.default(`获取git相关日志...`)
-], Workflow, "getGitLogInfoList", null);
+    logs_1.default((filename) => {
+        index_3.default.log(`打开指定文件: ${filename}`);
+    })
+], Workflow, "openDestFile", null);
 exports.default = Workflow;
 //# sourceMappingURL=index.js.map

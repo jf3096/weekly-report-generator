@@ -2,6 +2,8 @@ import Logger from '../utils/log/index';
 import log from '../utils/decorators/logs';
 import * as ExcelJS from 'exceljs';
 import {getArray} from '../utils/data/index';
+import * as mkdirp from 'mkdirp';
+import * as path from 'path';
 
 interface ISheet {
     name: string;
@@ -65,6 +67,8 @@ export default class Excel {
     })
     public static async write({filename, decorator, dest}: { filename: string, decorator: (workbook: IWorkbook) => Promise<IWorkbook>, dest: string }): Promise<void> {
         const workbook = await decorator(await Excel.open(filename));
+        const destDirectory = path.dirname(dest);
+        mkdirp.sync(destDirectory);
         return workbook.xlsx.writeFile(dest);
     }
 

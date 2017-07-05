@@ -18,6 +18,8 @@ const index_1 = require("../utils/log/index");
 const logs_1 = require("../utils/decorators/logs");
 const ExcelJS = require("exceljs");
 const index_2 = require("../utils/data/index");
+const mkdirp = require("mkdirp");
+const path = require("path");
 class Excel {
     //noinspection JSUnusedGlobalSymbols
     static read(filename) {
@@ -41,6 +43,8 @@ class Excel {
     static write({ filename, decorator, dest }) {
         return __awaiter(this, void 0, void 0, function* () {
             const workbook = yield decorator(yield Excel.open(filename));
+            const destDirectory = path.dirname(dest);
+            mkdirp.sync(destDirectory);
             return workbook.xlsx.writeFile(dest);
         });
     }

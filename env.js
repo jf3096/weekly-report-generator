@@ -17,7 +17,7 @@ exports.default = {
             updateAsExpected: `default.updateAsExpected`
         },
         source: `tests/1111.xlsx`,
-        dest: `dist/【工作周报】广州产品组XXX（${index_1.generateBusinessDateRangeString()}）.xlsx`,
+        dest: `dist/【工作周报】广州产品组佘艾伦（${index_1.generateBusinessDateRangeString()}）.xlsx`,
         shouldOpenAfterDest: true
     }
 };
